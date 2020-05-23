@@ -1,0 +1,100 @@
+{
+    "topic": "건강설문조사1",
+    "questions": [
+        {
+            "no": 1,
+            "qustion": "이름은?",
+            "answerType": "subjective"
+        },
+        {
+            "no": 2,
+            "qustion": "나이는?",
+            "answerType": "objective",
+            "options": [
+                {
+                    "value": "10 ~ 19",
+                    "linkTo": 7
+                },
+                {
+                    "value": "20 ~ 29"
+                },
+                {
+                    "value": "30 ~ 39",
+                    "linkTo": 7
+                },
+                {
+                    "value": "40 ~ 49",
+                    "linkTo": 7
+                },
+                {
+                    "value": "10세 미만이거나, 50세 이상",
+                    "linkTo": 4
+                }
+            ]
+        },
+        {
+            "no": 3,
+            "qustion": "성별은?",
+            "answerType": "selectable",
+            "options": [
+                {
+                    "value": "남"
+                },
+                {
+                    "value": "여"
+                }
+            ]
+        },
+        {
+            "no": 4,
+            "qustion": "당신이 가장 불편함을 느끼는 곳은?",
+            "answerType": "objective",
+            "mulAnswer" : true,
+            "options": [
+                {
+                    "value": "눈"
+                },
+                {
+                    "value": "목/허리"
+                },
+                {
+                    "value": "손목, 무릎 등의 관절"
+                },
+                {
+                    "value": "위, 장 등 소화기관"
+                },
+                {
+                    "value": "기타",
+                    "textAnswer": true
+                },
+                {
+                    "value": "없음",
+                    "linkTo": 7
+                }
+            ]
+        },
+        {
+            "no": 5,
+            "qustion": "불편함을 느낀 후 어떻게 처치하시나요?",
+            "answerType": "objective",
+            "options": [
+                {
+                    "value": "인터넷 검색"
+                },
+                {
+                    "value": "병원 방문"
+                },
+                {
+                    "value": "비전문인에게 조언 구하기"
+                },
+                {
+                    "value": "그냥 냅둔다"
+                },
+                {
+                    "value": "기타",
+                    "textAnswer": true
+                }
+            ]
+        }
+    ]
+}
