@@ -22,8 +22,8 @@ class MyApp extends StatelessWidget {
   }
 
   Survey readSurveyData() {
-    Future<String> objFuture = rootBundle.loadString('nidoc_survey1.json');
-    String objText;
+    Future<String> objFuture = rootBundle.loadString('test/nidoc_survey1.json');
+    String objText;// = '{"topic": "Health Survey1","questions": [{"no": 1,"question": "name?","answerType": "subjective"},{"no": 2,"question": "age?","answerType": "objective","options": [{"value": "10 ~ 19","linkTo": 7},{"value": "20 ~ 29"},{"value": "30 ~ 39","linkTo": 7},{"value": "40 ~ 49","linkTo": 7},{"value": "under 10 or over 50","linkTo": 4}]},{"no": 3,"question": "sex?","answerType": "selectable","options": [{"value": "M"},{"value": "W"}]},{"no": 4,"question": "hurt point?","answerType": "objective","mulAnswer" : true,"options": [{"value": "eye"},{"value": "neck/waist"},{"value": "wrist/knee"},{"value": "stomach"},{"value": "other","textAnswer": true},{"value": "nowhere","linkTo": 7}]},{"no": 5,"question": "What would you do when you feel uncomfortable of your body?","answerType": "objective","options": [{"value": "search"},{"value": "go to hospital"},{"value": "ask to non-expert"},{"value": "leave it out"},{"value": "guitar","textAnswer": true}]}]}';
 
     objFuture.then((data) {
       objText = data;
@@ -63,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              '$_survey.topic',
+              _survey.topic,
               style: Theme.of(context).textTheme.headline6,
             ),
             Container(
@@ -86,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => SurveyPage(_survey)),
+                                builder: (context) => SurveyPage(_survey, 1)),
                           );
                         })
                   ],
@@ -102,25 +102,28 @@ class _MyHomePageState extends State<MyHomePage> {
 
 class SurveyPage extends StatefulWidget {
   final Survey survey;
+  final int nextQ;
 
-  SurveyPage(this.survey);
+  SurveyPage(this.survey, this.nextQ);
 
   @override
-  _SurveyPageState createState() => _SurveyPageState(this.survey);
+  _SurveyPageState createState() => _SurveyPageState(this.survey, this.nextQ);
 }
 
 class _SurveyPageState extends State<SurveyPage> {
   Survey _survey;
   Question _question;
-  int _nextQ = 0;
+  int _nextQ;
 
   final myController = TextEditingController();
 
-  _SurveyPageState(Survey survey) {
-    _survey = survey;
-    if (_survey != null) {
-      _nextQ = 1;
-      _question = _survey.questions[_nextQ];
+  _SurveyPageState(Survey survey, int nextQ) {
+    if (survey != null) {
+      _survey = survey;
+      _nextQ = nextQ;
+      _question = nextQ <= _survey.questions.length
+          ? _survey.questions[nextQ - 1]
+          : null;
     }
   }
 
@@ -132,35 +135,39 @@ class _SurveyPageState extends State<SurveyPage> {
     print(option.answer);
 
     // 다음걸로 페이지 넘겨주기
-    if(option.linkTo != -1)
+    if (option.linkTo != -1)
       _nextQ = option.linkTo;
     else
       _nextQ++;
-/*    setState(() {
-      _question = _nextQ.moveNext();
-    });*/
   }
 
   void submit() {
     // 답변 저장
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => FinishPage()),
+    );
   }
 
-  List<Widget> _buildButtonList() {
+  List<Widget> _buildButtonList(BuildContext context) {
     List<Widget> ret;
-    if (_question.answerType == 'objective')
+    if (_question is Objective) {
       ret =
           (_question as Objective).options.map((e) => _buildButton(e)).toList();
-    else {
-      if((_question as Subjective).linkTo != -1)
+    } else {
+      if ((_question as Subjective).linkTo != -1)
         _nextQ = (_question as Subjective).linkTo;
       else
         _nextQ++;
       ret = [TextField(controller: myController)];
     }
+    ret.add(_nextButton(context));
     return ret;
   }
 
-  Widget _buildButton(Option option) { // multi obj 일 경우 radio button으로 바꾸기
+  Widget _buildButton(Option option) {
+    // multi obj 일 경우 radio button으로 바꾸기
     return RaisedButton(
       child: Text(
         option.answer,
@@ -173,7 +180,75 @@ class _SurveyPageState extends State<SurveyPage> {
     );
   }
 
-  Widget finishPage(BuildContext context) {
+  Widget _nextButton(BuildContext context) {
+    if (_nextQ > _survey.questions.length)
+      return RaisedButton(
+        child: Text(
+          '제출',
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.white,
+          ),
+        ),
+        onPressed: () => submit(),
+      );
+    else
+      return RaisedButton(
+          child: Text(
+            '다음',
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.white,
+            ),
+          ),
+          onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => SurveyPage(_survey, _nextQ)),
+              ));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_question == null)
+      return Scaffold(
+          appBar: AppBar(title: Text('Question $_question.no')),
+          body: Center(child: Text('No Data')));
+    else
+      return Scaffold(
+        appBar: AppBar(title: Text('Question $_question.no')),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                _question.qStr,
+                style: Theme.of(context).textTheme.headline6,
+              ),
+              Container(
+                margin: EdgeInsets.all(10),
+                child: ButtonTheme(
+                  minWidth: 300,
+                  height: 40,
+                  buttonColor: Colors.lightBlue,
+                  child: Column(children: _buildButtonList(context)),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+  }
+}
+
+class FinishPage extends StatefulWidget {
+  @override
+  _FinishPageState createState() => _FinishPageState();
+}
+
+class _FinishPageState extends State<FinishPage> {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Ni Doc')),
       body: Center(
@@ -183,62 +258,7 @@ class _SurveyPageState extends State<SurveyPage> {
             Text(
               '수고하셨습니다.',
               style: Theme.of(context).textTheme.headline6,
-            ),
-            Container(
-              margin: EdgeInsets.all(50),
-              child: ButtonTheme(
-                  minWidth: 150,
-                  height: 40,
-                  buttonColor: Colors.lightBlue,
-                  child: RaisedButton(
-                    child: Text(
-                      '제출',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.white,
-                      ),
-                    ),
-                    onPressed: () => submit(),
-                  )),
-            ),
-            RaisedButton(
-              child: Text(
-                '다음',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.white,
-                ),
-              ),
-              onPressed: () => setState(() {_question = _survey.questions[_nextQ];} ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (_question == null) return finishPage(context);
-    return Scaffold(
-      appBar: AppBar(title: Text('Question $_question.no')),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              '$_question.qStr',
-              style: Theme.of(context).textTheme.headline6,
-            ),
-            Container(
-              margin: EdgeInsets.all(10),
-              child: ButtonTheme(
-                minWidth: 300,
-                height: 40,
-                buttonColor: Colors.lightBlue,
-                child: Column(children: _buildButtonList()),
-              ),
-            ),
+            )
           ],
         ),
       ),
@@ -254,8 +274,6 @@ class Survey {
 
   String get topic => _topic;
 
-  List<Question> get questions => _questions;
-
   factory Survey.fromJson(dynamic json) {
     List qs = List();
 
@@ -267,10 +285,15 @@ class Survey {
                     ? Subjective.fromJson(q)
                     : Objective.fromJson(q)
               })
+          .map((q) => q['answerType'] as String == 'subjective'
+              ? Subjective.fromJson(q)
+              : Objective.fromJson(q))
           .toList();
     }
     return Survey(json['topic'] as String, qs);
   }
+
+  List get questions => _questions;
 }
 
 abstract class Question {
@@ -323,8 +346,12 @@ class Objective extends Question {
       mul = json['textAnswer'] as bool;
     }
 
-    var optObjsJson = json['options'] as List;
-    List options = optObjsJson.map((op) => Option.fromJson(op)).toList();
+    List options = List();
+
+    if(json['options'] != null) {
+      var optObjsJson = json['options'] as List;
+      options = optObjsJson.map((op) => Option.fromJson(op)).toList();
+    }
 
     return Objective(json['no'] as int, json['question'] as String,
         json['answerType'] as String, options, mul);
@@ -353,5 +380,10 @@ class Option {
     if (json['linkTo'] != null) linkTo = json['linkTo'] as int;
 
     return Option(json['value'] as String, text, linkTo);
+  }
+
+  @override
+  String toString() {
+    return '(textType: $_text, link to + $_linkTo) $_answer';
   }
 }

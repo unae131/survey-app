@@ -1,14 +1,14 @@
 {
-    "topic": "건강설문조사1",
+    "topic": "Health Survey1",
     "questions": [
         {
             "no": 1,
-            "qustion": "이름은?",
+            "question": "name?",
             "answerType": "subjective"
         },
         {
             "no": 2,
-            "qustion": "나이는?",
+            "question": "age?",
             "answerType": "objective",
             "options": [
                 {
@@ -27,71 +27,71 @@
                     "linkTo": 7
                 },
                 {
-                    "value": "10세 미만이거나, 50세 이상",
+                    "value": "under 10 or over 50",
                     "linkTo": 4
                 }
             ]
         },
         {
             "no": 3,
-            "qustion": "성별은?",
+            "question": "sex?",
             "answerType": "selectable",
             "options": [
                 {
-                    "value": "남"
+                    "value": "M"
                 },
                 {
-                    "value": "여"
+                    "value": "W"
                 }
             ]
         },
         {
             "no": 4,
-            "qustion": "당신이 가장 불편함을 느끼는 곳은?",
+            "question": "hurt point?",
             "answerType": "objective",
             "mulAnswer" : true,
             "options": [
                 {
-                    "value": "눈"
+                    "value": "eye"
                 },
                 {
-                    "value": "목/허리"
+                    "value": "neck/waist"
                 },
                 {
-                    "value": "손목, 무릎 등의 관절"
+                    "value": "wrist/knee"
                 },
                 {
-                    "value": "위, 장 등 소화기관"
+                    "value": "stomach"
                 },
                 {
-                    "value": "기타",
+                    "value": "other",
                     "textAnswer": true
                 },
                 {
-                    "value": "없음",
+                    "value": "nowhere",
                     "linkTo": 7
                 }
             ]
         },
         {
             "no": 5,
-            "qustion": "불편함을 느낀 후 어떻게 처치하시나요?",
+            "question": "What would you do when you feel uncomfortable of your body?",
             "answerType": "objective",
             "options": [
                 {
-                    "value": "인터넷 검색"
+                    "value": "search"
                 },
                 {
-                    "value": "병원 방문"
+                    "value": "go to hospital"
                 },
                 {
-                    "value": "비전문인에게 조언 구하기"
+                    "value": "ask to non-expert"
                 },
                 {
-                    "value": "그냥 냅둔다"
+                    "value": "leave it out"
                 },
                 {
-                    "value": "기타",
+                    "value": "guitar",
                     "textAnswer": true
                 }
             ]
