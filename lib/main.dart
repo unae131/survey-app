@@ -280,11 +280,6 @@ class Survey {
     if (json['questions'] != null) {
       var qObjsJson = json['questions'] as List;
       qs = qObjsJson
-          .map((q) => {
-                json['answerType'] as String == 'subjective'
-                    ? Subjective.fromJson(q)
-                    : Objective.fromJson(q)
-              })
           .map((q) => q['answerType'] as String == 'subjective'
               ? Subjective.fromJson(q)
               : Objective.fromJson(q))
