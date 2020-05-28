@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:nidocapp/view/SurveyPage.dart';
 import 'package:nidocapp/model/Survey.dart';
+import 'SurveyStartPage.dart';
 
 class MenuPage extends StatefulWidget {
   final Survey survey;

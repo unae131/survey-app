@@ -25,33 +25,29 @@ class Survey {
 
 abstract class Question {
   int _no;
+  int _linkTo;
   String _qStr;
   String _answerType;
 
-  Question(this._no, this._qStr, this._answerType);
+  Question(this._no, this._linkTo, this._qStr, this._answerType);
 
   int get no => _no;
-
+  int get linkTo => _linkTo;
   String get qStr => _qStr;
-
   String get answerType => _answerType;
 }
 
 class Subjective extends Question {
-  int _linkTo;
-
-  int get linkTo => _linkTo;
-
-  Subjective(int no, String str, String type, this._linkTo)
-      : super(no, str, type);
+  Subjective(int no, int link, String str, String type)
+      : super(no, link, str, type);
 
   factory Subjective.fromJson(dynamic json) {
-    int linkTo = -1;
+    int linkTo = (json['no'] as int) + 1;
 
     if (json['linkTo'] != null) linkTo = json['linkTo'] as int;
 
-    return Subjective(json['no'] as int, json['question'] as String,
-        json['answerType'] as String, linkTo);
+    return Subjective(json['no'] as int, linkTo, json['question'] as String,
+        json['answerType'] as String);
   }
 }
 
@@ -60,13 +56,16 @@ class Objective extends Question {
   bool _mul;
 
   List<Option> get options => _options;
-
   bool get mul => _mul;
 
-  Objective(int no, String str, String type, this._options, this._mul)
-      : super(no, str, type);
+  Objective(int no, int link, String str, String type, this._options, this._mul)
+      : super(no, link, str, type);
 
   factory Objective.fromJson(dynamic json) {
+    int linkTo = (json['no'] as int) + 1;
+
+    if (json['linkTo'] != null) linkTo = json['linkTo'] as int;
+
     bool mul = false;
 
     if (json['textAnswer'] != null) {
@@ -80,7 +79,7 @@ class Objective extends Question {
       options = optObjsJson.map((op) => Option.fromJson(op)).toList();
     }
 
-    return Objective(json['no'] as int, json['question'] as String,
+    return Objective(json['no'] as int, linkTo, json['question'] as String,
         json['answerType'] as String, options, mul);
   }
 }
@@ -91,9 +90,7 @@ class Option {
   int _linkTo;
 
   String get answer => _answer;
-
   bool get text => _text;
-
   int get linkTo => _linkTo;
 
   Option(this._answer, this._text, this._linkTo);
