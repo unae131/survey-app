@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:survey/model/Survey.dart';
+import 'package:nidocapp/model/Survey.dart';
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title, this.survey}) : super(key: key);
+class SurveyStartPage extends StatefulWidget {
+  SurveyStartPage({Key key, this.title, this.survey}) : super(key: key);
 
   final String title;
   final Survey survey;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState(this.survey);
+  _SurveyStartPageState createState() => _SurveyStartPageState(this.survey);
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _SurveyStartPageState extends State<SurveyStartPage> {
   Survey _survey;
 
-  _MyHomePageState(Survey survey) {
+  _SurveyStartPageState(Survey survey) {
     _survey = survey;
   }
 

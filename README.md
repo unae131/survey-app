@@ -1,6 +1,6 @@
-# survey
+# nidocapp
 
-First flutter application.
+first nidoc app
 
 ## Getting Started
 
