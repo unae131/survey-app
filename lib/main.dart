@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:nidocapp/view/MenuPage.dart';
+import 'package:nidocapp/view/SurveyPage.dart';
 import 'package:nidocapp/view/SplashPage.dart';
 
 void main() {
@@ -16,6 +18,10 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: SplashPage(),
+      routes: {
+        //'/menu' : (context) => MenuPage(),
+        //'/surveyStart' : (context) => SurveyStartPage(),
+      }
     );
   }
 }

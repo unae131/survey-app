@@ -1,68 +1,55 @@
 import 'package:flutter/material.dart';
 import 'package:nidocapp/model/Survey.dart';
 
-class SurveyStartPage extends StatefulWidget {
-  SurveyStartPage({Key key, this.title, this.survey}) : super(key: key);
+class SurveyStartPage extends StatelessWidget {
+  // json 파일이 제대로 읽혔는지 이전에 확인되어 있어야함
+  // 후에 다양한 테스트가 가능하게 될 경우를 생각
+  SurveyStartPage({Key key, this.survey}) : super(key: key);
 
-  final String title;
   final Survey survey;
 
   @override
-  _SurveyStartPageState createState() => _SurveyStartPageState(this.survey);
-}
-
-class _SurveyStartPageState extends State<SurveyStartPage> {
-  Survey _survey;
-
-  _SurveyStartPageState(Survey survey) {
-    _survey = survey;
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              _survey.topic,
-              style: Theme.of(context).textTheme.headline6,
-            ),
-            Container(
-              margin: EdgeInsets.all(10),
-              child: ButtonTheme(
-                minWidth: 300,
-                height: 40,
-                buttonColor: Colors.lightBlue,
-                child: Column(
-                  children: <Widget>[
-                    RaisedButton(
-                        child: Text(
-                          'Start',
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
-                          ),
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SurveyPage(_survey, 1)),
-                          );
-                        })
-                  ],
-                ),
-              ),
-            ),
-          ],
+    if (survey == null) {
+      return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text('설문조사 정보를 읽을 수 없습니다.'),
+              RaisedButton(
+                  child: Text('돌아가기'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  })
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              RaisedButton(
+                  child: Text(
+                    '시작',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            SurveyPage(survey, 1)));
+                  }),
+            ],
+          ),
+        ),
+      );
+    }
   }
 }
 
@@ -168,10 +155,10 @@ class _SurveyPageState extends State<SurveyPage> {
             ),
           ),
           onPressed: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => SurveyPage(_survey, _nextQ)),
-          ));
+                context,
+                MaterialPageRoute(
+                    builder: (context) => FinishPage(survey:_survey))//SurveyPage(_survey, _nextQ)),
+              ));
   }
 
   @override
@@ -179,10 +166,10 @@ class _SurveyPageState extends State<SurveyPage> {
     if (_question == null)
       return Scaffold(
           appBar: AppBar(title: Text('Ni Doc')),
-          body: Center(child: Text('No ${_nextQ-1}.')));
+          body: Center(child: Text('No ${_nextQ - 1}.')));
     else
       return Scaffold(
-        appBar: AppBar(title: Text('No ${_nextQ-1}.')),
+        appBar: AppBar(title: Text('No ${_nextQ - 1}.')),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -207,16 +194,15 @@ class _SurveyPageState extends State<SurveyPage> {
   }
 }
 
-class FinishPage extends StatefulWidget {
-  @override
-  _FinishPageState createState() => _FinishPageState();
-}
+class FinishPage extends StatelessWidget {
+  FinishPage({Key key, this.survey}) : super(key: key);
 
-class _FinishPageState extends State<FinishPage> {
+  final Survey survey;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Ni Doc')),
+      appBar: AppBar(title: Text(survey.topic)),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -224,7 +210,12 @@ class _FinishPageState extends State<FinishPage> {
             Text(
               '수고하셨습니다.',
               style: Theme.of(context).textTheme.headline6,
-            )
+            ),
+            RaisedButton(
+                child: Text('종료'),
+                onPressed: () {
+                  Navigator.popUntil(context, ModalRoute.withName('/surveyStart'));
+                }),
           ],
         ),
       ),
