@@ -31,9 +31,9 @@ class FinishPage extends StatelessWidget {
             RaisedButton(
                 child: Text('종료'),
                 onPressed: () {
-                  for(int i = 0; i < survey.questions.length+2; i++)
-                  Navigator.pop(
-                      context);
+                  Navigator.popUntil(
+                      context, ModalRoute.withName('/surveyStart'));
+                  Navigator.pop(context);
                 }),
           ],
         ),

@@ -19,10 +19,6 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: SplashPage(),
-      routes: {
-        '/menu' : (context) => MenuPage(),
-        '/surveyStart' : (context) => SurveyStartPage(),
-      }
     );
   }
 }

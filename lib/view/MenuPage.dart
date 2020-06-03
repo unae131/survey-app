@@ -24,6 +24,7 @@ class _MenuPageState extends State<MenuPage> {
               child: Text('설문조사'),
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
+                    settings: RouteSettings(name: '/surveyStart'),
                     builder: (BuildContext context) =>
                         SurveyStartPage(survey: widget.survey)));
               },
