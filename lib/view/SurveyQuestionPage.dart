@@ -21,11 +21,13 @@ class QuestionPage extends StatefulWidget {
 class _QuestionPageState extends State<QuestionPage> {
   final myController = TextEditingController();
   Question question;
-  int linkTo = -1;
+  int linkTo;
   var _groupValue = 0;
   List<bool> _isChecked;
 
-  _QuestionPageState(this.question);
+  _QuestionPageState(this.question) {
+    linkTo = question.linkTo;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +58,6 @@ class _QuestionPageState extends State<QuestionPage> {
         ),
       );
     } else {
-      linkTo = question.linkTo;
-
       return Scaffold(
         appBar: AppBar(
           title: Text(widget.survey.topic),
@@ -93,12 +93,6 @@ class _QuestionPageState extends State<QuestionPage> {
   Widget answerSub() {
     return TextField(
       controller: myController,
-      onEditingComplete: () {
-        if (widget.answer[widget.qIdx] == null)
-          widget.answer[widget.qIdx] = List();
-
-        widget.answer[widget.qIdx].add(myController.text);
-      },
     );
     // 제출 기능 추가 구현 필요, 객관식에서도 쓰인 것 주의
   }
@@ -140,7 +134,11 @@ class _QuestionPageState extends State<QuestionPage> {
       value: i,
       groupValue: _groupValue,
       onChanged: (newValue) => setState(() {
-        linkTo = o.linkTo;
+        if (o.linkTo != -1)
+          linkTo = o.linkTo;
+        else
+          linkTo = question.linkTo;
+
         _groupValue = newValue;
         widget.answer[widget.qIdx] = [i.toString()];
       }),
@@ -158,15 +156,16 @@ class _QuestionPageState extends State<QuestionPage> {
 
     // 다중 선택의 경우 선택지 각각에 링크 부여 불가능
     return Checkbox(
-        value: _isChecked[i-1],
-        onChanged: (newValue) => setState(() {
-              _isChecked[i-1] = newValue;
-              if (newValue) {
-                widget.answer[widget.qIdx][i - 1] = 'true';
-              } else {
-                widget.answer[widget.qIdx][i - 1] = 'false';
-              }
-            }));
+      value: _isChecked[i - 1],
+      onChanged: (newValue) => setState(() {
+        _isChecked[i - 1] = newValue;
+        if (newValue) {
+          widget.answer[widget.qIdx][i - 1] = 'true';
+        } else {
+          widget.answer[widget.qIdx][i - 1] = 'false';
+        }
+      }),
+    );
   }
 
   Widget nextPageButton() {
@@ -190,12 +189,20 @@ class _QuestionPageState extends State<QuestionPage> {
           color: Colors.white,
         ),
       ),
-      onPressed: () => Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => page,
-        ),
-      ),
+      onPressed: () {
+        if (widget.answer[widget.qIdx] == null)
+          widget.answer[widget.qIdx] = List();
+
+        if(_isChecked == null)
+          widget.answer[widget.qIdx].add(myController.text);
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => page,
+          ),
+        );
+      },
     );
   }
 }

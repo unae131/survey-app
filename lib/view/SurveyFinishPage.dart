@@ -10,6 +10,13 @@ class FinishPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // answer 파일에 옮기고
+    for(int i = 0; i < answer.length; i++){
+      print('question $i');
+      if(answer[i] != null)
+      for(int j = 0; j < (answer[i] as List).length; j++){
+        print(answer[i][j]);
+      }
+    }
 
     return Scaffold(
       appBar: AppBar(title: Text(survey.topic)),

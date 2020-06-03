@@ -27,7 +27,7 @@ class SurveyStartPage extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (BuildContext context) =>
-                            QuestionPage(survey, 0, List(survey.questions.length)),
+                            QuestionPage(survey, 0, List<List>(survey.questions.length)),
                       ));
                     },
                   ),
