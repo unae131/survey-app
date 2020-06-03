@@ -13,8 +13,8 @@ class Survey {
       var qObjsJson = json['questions'] as List;
       qs = qObjsJson
           .map((q) => q['answerType'] as String == 'subjective'
-          ? Subjective.fromJson(q)
-          : Objective.fromJson(q))
+              ? Subjective.fromJson(q)
+              : Objective.fromJson(q))
           .toList();
     }
     return Survey(json['topic'] as String, qs);
@@ -32,8 +32,11 @@ abstract class Question {
   Question(this._no, this._linkTo, this._qStr, this._answerType);
 
   int get no => _no;
+
   int get linkTo => _linkTo;
+
   String get qStr => _qStr;
+
   String get answerType => _answerType;
 }
 
@@ -56,6 +59,7 @@ class Objective extends Question {
   bool _mul;
 
   List<Option> get options => _options;
+
   bool get mul => _mul;
 
   Objective(int no, int link, String str, String type, this._options, this._mul)
@@ -68,13 +72,13 @@ class Objective extends Question {
 
     bool mul = false;
 
-    if (json['textAnswer'] != null) {
-      mul = json['textAnswer'] as bool;
+    if (json['mulAnswer'] != null) {
+      mul = json['mulAnswer'] as bool;
     }
 
     List options = List();
 
-    if(json['options'] != null) {
+    if (json['options'] != null) {
       var optObjsJson = json['options'] as List;
       options = optObjsJson.map((op) => Option.fromJson(op)).toList();
     }
@@ -90,7 +94,9 @@ class Option {
   int _linkTo;
 
   String get answer => _answer;
+
   bool get text => _text;
+
   int get linkTo => _linkTo;
 
   Option(this._answer, this._text, this._linkTo);

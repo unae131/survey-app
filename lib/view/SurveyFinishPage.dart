@@ -11,7 +11,6 @@ class FinishPage extends StatelessWidget {
   Widget build(BuildContext context) {
     // answer 파일에 옮기고
 
-
     return Scaffold(
       appBar: AppBar(title: Text(survey.topic)),
       body: Center(
@@ -25,8 +24,9 @@ class FinishPage extends StatelessWidget {
             RaisedButton(
                 child: Text('종료'),
                 onPressed: () {
-                  Navigator.popUntil(
-                      context, ModalRoute.withName('/surveyStart'));
+                  for(int i = 0; i < survey.questions.length+2; i++)
+                  Navigator.pop(
+                      context);
                 }),
           ],
         ),

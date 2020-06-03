@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nidocapp/model/Survey.dart';
 import 'MenuPage.dart';
@@ -21,6 +22,8 @@ class _QuestionPageState extends State<QuestionPage> {
   final myController = TextEditingController();
   Question question;
   int linkTo = -1;
+  var _groupValue = 0;
+  List<bool> _isChecked;
 
   _QuestionPageState(this.question);
 
@@ -52,8 +55,7 @@ class _QuestionPageState extends State<QuestionPage> {
           ),
         ),
       );
-    }
-    else {
+    } else {
       linkTo = question.linkTo;
 
       return Scaffold(
@@ -61,14 +63,21 @@ class _QuestionPageState extends State<QuestionPage> {
           title: Text(widget.survey.topic),
         ),
         body: Center(
-          child: Column(
+          child:
+              /*ListView(
+            scrollDirection: Axis.vertical,
+            padding: EdgeInsets.all(30),
+            children: <Widget>[*/
+              Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text('No${question.no}. ${question.qStr}'),
+              Text('${question.qStr}'),
               answerBody(),
               nextPageButton()
             ],
           ),
+          /*],
+          ),*/
         ),
       );
     }
@@ -96,40 +105,68 @@ class _QuestionPageState extends State<QuestionPage> {
 
   Widget answerObj() {
     Objective question = this.question as Objective;
+
     int i = 1;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: question.options
-          .map((o) => Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: drawOption(o, i++, question.mul),
-              ))
-          .toList(),
+    return Container(
+      padding: EdgeInsets.fromLTRB(40, 30, 40, 30),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: question.options
+            .map((o) => Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: drawOption(o, i++, question.mul),
+                ))
+            .toList(),
+      ),
     );
   }
 
   List<Widget> drawOption(Option o, int i, bool mul) {
-    var _groupValue = -1;
     List children = <Widget>[
-      Radio(
-        value: i,
-        groupValue: mul ? i : _groupValue,
-        onChanged: (newValue) {
-          if (!mul) {
-            // 다중 선택의 경우 선택지 각각에 링크 부여 불가능
-            linkTo = o.linkTo;
-          }
-          widget.answer[widget.qIdx] = [i.toString()];
-          _groupValue = newValue;
-        },
-      ),
+      !mul ? singOptions(o, i) : mulOptions(o, i),
       Text(o.answer)
     ];
     if (o.text) {
-      children.add(answerSub());
+      children.add(SizedBox(
+        width: 200,
+        child: answerSub(),
+      ));
+    }
+    return children;
+  }
+
+  Widget singOptions(Option o, int i) {
+    return Radio(
+      value: i,
+      groupValue: _groupValue,
+      onChanged: (newValue) => setState(() {
+        linkTo = o.linkTo;
+        _groupValue = newValue;
+        widget.answer[widget.qIdx] = [i.toString()];
+      }),
+    );
+  }
+
+  Widget mulOptions(Option o, int i) {
+    if (_isChecked == null) {
+      _isChecked = List((this.question as Objective).options.length);
+      _isChecked.fillRange(0, _isChecked.length, false);
     }
 
-    return children;
+    if (widget.answer[widget.qIdx] == null)
+      widget.answer[widget.qIdx] = List(_isChecked.length);
+
+    // 다중 선택의 경우 선택지 각각에 링크 부여 불가능
+    return Checkbox(
+        value: _isChecked[i-1],
+        onChanged: (newValue) => setState(() {
+              _isChecked[i-1] = newValue;
+              if (newValue) {
+                widget.answer[widget.qIdx][i - 1] = 'true';
+              } else {
+                widget.answer[widget.qIdx][i - 1] = 'false';
+              }
+            }));
   }
 
   Widget nextPageButton() {
@@ -145,6 +182,7 @@ class _QuestionPageState extends State<QuestionPage> {
     }
 
     return RaisedButton(
+      color: Colors.cyan,
       child: Text(
         str,
         style: TextStyle(
