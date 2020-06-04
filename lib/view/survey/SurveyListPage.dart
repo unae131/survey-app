@@ -2,16 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:nidocapp/model/Survey.dart';
 import 'SurveyStartPage.dart';
 
-class MenuPage extends StatefulWidget {
+class SurveyListPage extends StatefulWidget {
   final Survey survey;
 
-  MenuPage({this.survey});
+  SurveyListPage({this.survey});
 
   @override
-  _MenuPageState createState() => _MenuPageState();
+  _SurveyListPage createState() => _SurveyListPage();
 }
 
-class _MenuPageState extends State<MenuPage> {
+class _SurveyListPage extends State<SurveyListPage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,6 +22,8 @@ class _MenuPageState extends State<MenuPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             RaisedButton(
+              color: Colors.cyan,
+              textColor: Colors.white,
               child: Text('설문조사'),
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
@@ -29,7 +32,6 @@ class _MenuPageState extends State<MenuPage> {
                         SurveyStartPage(survey: widget.survey)));
               },
             ),
-            //Image.asset('src/nidoc_splash.png', height: 120, width: 120),
           ],
         ),
       ),

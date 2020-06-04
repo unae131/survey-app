@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nidocapp/model/Survey.dart';
-import 'package:nidocapp/view/MenuPage.dart';
+import 'package:nidocapp/view/HomePage.dart';
 
 Future<String> readJson() {
   return Future.delayed(Duration(seconds: 2),
@@ -24,7 +24,6 @@ class SplashPage extends StatelessWidget {
           future: parseSurvey(),
           builder: (context, snapshot) {
             if (snapshot.hasError) print(snapshot.error);
-
             return snapshot.hasData
                 ? MenuPage(survey: snapshot.data)
                 : Center(

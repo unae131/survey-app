@@ -12,22 +12,34 @@ class SurveyStartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('NiDoc')),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: (survey == null || survey.questions == null || survey.questions.length == 0)
+          children: (survey == null ||
+                  survey.questions == null ||
+                  survey.questions.length == 0)
               ? <Widget>[
                   Text('설문조사 정보를 읽을 수 없습니다.'),
                 ]
               : <Widget>[
-                  Text(survey.topic),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(16, 32, 16, 32),
+                    child: Text(
+                      '${survey.topic} 시작합니다',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
                   RaisedButton(
+                    color: Colors.cyan,
+                    textColor: Colors.white,
                     child: Text('시작'),
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            QuestionPage(survey, 0, List<List>(survey.questions.length)),
+                        builder: (BuildContext context) => QuestionPage(
+                            survey, 0, List<List>(survey.questions.length)),
                       ));
                     },
                   ),

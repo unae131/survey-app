@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:nidocapp/view/MenuPage.dart';
-import 'package:nidocapp/view/SurveyQuestionPage.dart';
+import 'package:nidocapp/view/HomePage.dart';
+import 'file:///C:/Users/Pa-O-Hoo/AndroidStudioProjects/survey/lib/view/survey/SurveyQuestionPage.dart';
 import 'package:nidocapp/view/SplashPage.dart';
-import 'package:nidocapp/view/SurveyStartPage.dart';
+import 'file:///C:/Users/Pa-O-Hoo/AndroidStudioProjects/survey/lib/view/survey/SurveyStartPage.dart';
 
 void main() {
   runApp(MyApp());

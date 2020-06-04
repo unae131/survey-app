@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nidocapp/model/Survey.dart';
-import 'MenuPage.dart';
+import '../HomePage.dart';
 import 'SurveyFinishPage.dart';
 
 /* 이전 질문 페이지로 돌아갈 때 응답 남을 수 있게 수정 필요
@@ -60,21 +60,30 @@ class _QuestionPageState extends State<QuestionPage> {
     } else {
       return Scaffold(
         appBar: AppBar(
-          title: Text(widget.survey.topic),
+          title: Text(
+            widget.survey.topic,
+          ),
         ),
         body: Center(
-          child:
-              /*ListView(
+          child: Container(
+            margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
+            /*ListView(
             scrollDirection: Axis.vertical,
             padding: EdgeInsets.all(30),
             children: <Widget>[*/
-              Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text('${question.qStr}'),
-              answerBody(),
-              nextPageButton()
-            ],
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  '${question.qStr}',
+                  textScaleFactor: 1.5,
+                  style: Theme.of(context).textTheme.bodyText1,
+                  textAlign: TextAlign.center,
+                ),
+                answerBody(),
+                nextPageButton()
+              ],
+            ),
           ),
           /*],
           ),*/
@@ -193,7 +202,7 @@ class _QuestionPageState extends State<QuestionPage> {
         if (widget.answer[widget.qIdx] == null)
           widget.answer[widget.qIdx] = List();
 
-        if(_isChecked == null)
+        if (_isChecked == null)
           widget.answer[widget.qIdx].add(myController.text);
 
         Navigator.push(
