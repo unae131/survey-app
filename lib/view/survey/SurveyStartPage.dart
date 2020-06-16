@@ -11,6 +11,11 @@ class SurveyStartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textStyle = TextStyle(fontFamily: 'DoHyeon').copyWith(
+      color: Color(0xFF333366),
+      fontSize: 22.0,
+    );
+
     return Scaffold(
       body: Center(
         child: Column(
@@ -24,13 +29,7 @@ class SurveyStartPage extends StatelessWidget {
               : <Widget>[
                   Container(
                     margin: EdgeInsets.fromLTRB(16, 32, 16, 32),
-                    child: Text(
-                      '${survey.topic} 시작합니다',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
+                    child: Text('${survey.topic} 시작합니다', style: textStyle),
                   ),
                   RaisedButton(
                     color: Colors.cyan,

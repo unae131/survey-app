@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nidocapp/model/Survey.dart';
 import 'package:nidocapp/view/survey/SurveyListRow.dart';
-import 'SurveyStartPage.dart';
 
 class SurveyListPage extends StatefulWidget {
-  final Survey survey;
+  final Survey survey; // 후에 리스트로 받기
 
   SurveyListPage({this.survey});
 
@@ -19,19 +18,8 @@ class _SurveyListPage extends State<SurveyListPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          RaisedButton(
-            color: Colors.cyan,
-            textColor: Colors.white,
-            child: Text('설문조사'),
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  settings: RouteSettings(name: '/surveyStart'),
-                  builder: (BuildContext context) =>
-                      SurveyStartPage(survey: widget.survey)));
-            },
-          ),
-          SurveyListRow(),
-          SurveyListRow(),
+          SurveyListRow(widget.survey),
+          SurveyListRow(widget.survey),
         ],
       ),
     );

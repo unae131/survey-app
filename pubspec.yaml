@@ -69,7 +69,7 @@ flutter:
     - family: DoHyeon
       fonts:
         - asset: assets/fonts/DoHyeon-Regular.ttf
-          weight: 400
+          weight: 600
     - family: NotoSansKR
       fonts:
         - asset: assets/fonts/NotoSansKR-Light.otf

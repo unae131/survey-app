@@ -22,7 +22,7 @@ class NiDocAppBar extends StatelessWidget {
             const Color(0xFF00CCFF),
           ],
           begin: const FractionalOffset(0.0, 0.0),
-          end: const FractionalOffset(0.8, 0.0),
+          end: const FractionalOffset(0.4, 0.0),
           stops: [0.0, 1.0],
           tileMode: TileMode
               .clamp, // reuse last color if the stops don't fill the whole area

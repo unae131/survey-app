@@ -22,6 +22,9 @@ class _MenuPageState extends State<MenuPage> {
 
   @override
   Widget build(BuildContext context) {
+    final regularTextStyle = (const TextStyle(fontFamily: 'DoHyeon')).copyWith(
+        fontSize: 12.0, fontWeight: FontWeight.w400);
+
     return Scaffold(
       body: new Column(
         children: <Widget>[
@@ -40,13 +43,16 @@ class _MenuPageState extends State<MenuPage> {
         items: [
           BottomNavigationBarItem(
             icon: new Icon(Icons.home),
-            title: new Text('홈'),
+            title: new Text('홈', style: regularTextStyle),
           ),
           BottomNavigationBarItem(
             icon: new Icon(Icons.mail),
-            title: new Text('설문조사'),
+            title: new Text('설문조사', style: regularTextStyle),
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.person), title: Text('프로필'))
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            title: Text('프로필', style: regularTextStyle),
+          )
         ],
       ),
     );
