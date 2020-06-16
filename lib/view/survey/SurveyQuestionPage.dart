@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nidocapp/model/Survey.dart';
 import '../HomePage.dart';
+import '../NiDocAppBar.dart';
 import 'SurveyFinishPage.dart';
 
 /* 이전 질문 페이지로 돌아갈 때 응답 남을 수 있게 수정 필요
@@ -74,6 +75,7 @@ class _QuestionPageState extends State<QuestionPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                //NiDocAppBar('${widget.survey.topic}'),
                 Text(
                   '${question.qStr}',
                   textScaleFactor: 1.5,

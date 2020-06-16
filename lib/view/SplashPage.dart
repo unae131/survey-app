@@ -7,7 +7,7 @@ import 'package:nidocapp/view/HomePage.dart';
 
 Future<String> readJson() {
   return Future.delayed(Duration(seconds: 2),
-      () => rootBundle.loadString('src/nidoc_survey1.json'));
+      () => rootBundle.loadString('assets/nidoc_survey1.json'));
 }
 
 Future<Survey> parseSurvey() async {
@@ -27,7 +27,7 @@ class SplashPage extends StatelessWidget {
             return snapshot.hasData
                 ? MenuPage(survey: snapshot.data)
                 : Center(
-                    child: Image.asset('src/nidoc_splash.png',
+                    child: Image.asset('assets/images/nidoc_splash.png',
                         height: 120, width: 120));
           }),
     );

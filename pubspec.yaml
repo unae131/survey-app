@@ -46,9 +46,9 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - src/nidoc_survey1.json
-    - src/nidoc_logo.jpg
-    - src/nidoc_splash.png
+    - assets/nidoc_survey1.json
+    - assets/images/nidoc_logo.jpg
+    - assets/images/nidoc_splash.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -61,10 +61,22 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-SemiBold.ttf
+          weight: 600
+    - family: DoHyeon
+      fonts:
+        - asset: assets/fonts/DoHyeon-Regular.ttf
+          weight: 400
+    - family: NotoSansKR
+      fonts:
+        - asset: assets/fonts/NotoSansKR-Light.otf
+        - asset: assets/fonts/NotoSansKR-Regular.otf
+        - asset: assets/fonts/NotoSansKR-Thin.otf
+          weight: 400
+
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

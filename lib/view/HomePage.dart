@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nidocapp/model/Survey.dart';
+import 'NiDocAppBar.dart';
 import 'survey/SurveyListPage.dart';
 import 'TestPage.dart';
 
@@ -10,7 +11,7 @@ class MenuPage extends StatefulWidget {
 
   @override
   _MenuPageState createState() =>
-      _MenuPageState([TestPage(), SurveyListPage(survey: survey), TestPage()]);
+      _MenuPageState([SurveyListPage(survey: survey), TestPage(), TestPage()]);
 }
 
 class _MenuPageState extends State<MenuPage> {
@@ -22,16 +23,12 @@ class _MenuPageState extends State<MenuPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Ni Doc',
-          style: TextStyle(
-            color: Colors.white,
-            decorationThickness: 2.85,
-          ),
-        ),
+      body: new Column(
+        children: <Widget>[
+          NiDocAppBar("Ni Doc"),
+          _children[_currentIndex],
+        ],
       ),
-      body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         // this will be set when a new tab is tapped
@@ -49,8 +46,7 @@ class _MenuPageState extends State<MenuPage> {
             icon: new Icon(Icons.mail),
             title: new Text('설문조사'),
           ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person), title: Text('프로필'))
+          BottomNavigationBarItem(icon: Icon(Icons.person), title: Text('프로필'))
         ],
       ),
     );
