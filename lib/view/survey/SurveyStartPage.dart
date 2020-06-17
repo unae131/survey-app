@@ -28,9 +28,11 @@ class SurveyStartPage extends StatelessWidget {
                 ]
               : <Widget>[
                   Container(
-                    margin: EdgeInsets.fromLTRB(16, 32, 16, 32),
-                    child: Text('${survey.topic} 시작합니다', style: textStyle),
-                  ),
+                      margin: EdgeInsets.fromLTRB(16, 32, 16, 32),
+                      child: Hero(
+                        tag: "surve-topic-${survey.topic}",
+                        child: Text('${survey.topic} 시작합니다', style: textStyle),
+                      )),
                   RaisedButton(
                     color: Colors.cyan,
                     textColor: Colors.white,

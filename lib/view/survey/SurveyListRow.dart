@@ -24,9 +24,12 @@ class SurveyListRow extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            survey.topic,
-            style: headerTextStyle,
+          Hero(
+            tag: "surve-topic-${survey.topic}",
+            child: Text(
+              survey.topic,
+              style: headerTextStyle,
+            ),
           ),
           Container(height: 0.0),
           Text(
@@ -56,8 +59,9 @@ class SurveyListRow extends StatelessWidget {
 
     return GestureDetector(
       onTap: () => Navigator.of(context).push(MaterialPageRoute(
-          settings: RouteSettings(name: '/surveyStart'),
-          builder: (BuildContext context) => SurveyStartPage(survey: survey))),
+        settings: RouteSettings(name: '/surveyStart'),
+        builder: (BuildContext context) => SurveyStartPage(survey: survey),
+      )),
       child: Container(
         //color: Colors.black,
         height: 120.0,

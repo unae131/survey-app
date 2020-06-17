@@ -17,10 +17,10 @@ class _SurveyListPage extends State<SurveyListPage> {
     // 임시
     var surveys = [
       widget.survey,
-      widget.survey,
-      widget.survey,
-      widget.survey,
-      widget.survey,
+      //widget.survey,
+      //widget.survey,
+      //widget.survey,
+      //widget.survey,
     ];
 
     return Expanded(
