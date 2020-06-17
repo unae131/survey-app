@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class NiDocAppBar extends StatelessWidget {
   final String title;
-  final double barHeight = 66.0;
+  final double barHeight = 60.0;
 
   NiDocAppBar(this.title);
 
@@ -22,10 +22,9 @@ class NiDocAppBar extends StatelessWidget {
             const Color(0xFF00CCFF),
           ],
           begin: const FractionalOffset(0.0, 0.0),
-          end: const FractionalOffset(0.4, 0.0),
+          end: const FractionalOffset(0.3, 0.0),
           stops: [0.0, 1.0],
-          tileMode: TileMode
-              .clamp, // reuse last color if the stops don't fill the whole area
+          tileMode: TileMode.clamp, // reuse last color if the stops don't fill the whole area
         ),
       ),
       child: Center(
@@ -35,7 +34,7 @@ class NiDocAppBar extends StatelessWidget {
             color: Colors.white,
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w600,
-            fontSize: 36.0,
+            fontSize: 33.0,
           ),
         ),
       ),

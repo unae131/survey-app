@@ -16,9 +16,7 @@ class SurveyListRow extends StatelessWidget {
       fontSize: 22.0,
     );
     final regularTextStyle = TextStyle(fontFamily: 'NotoSansKR').copyWith(
-        color: Colors.blueGrey,
-        fontSize: 12.0,
-        fontWeight: FontWeight.w500);
+        color: Colors.blueGrey, fontSize: 12.0, fontWeight: FontWeight.w500);
 
     final surveyContent = Container(
       margin: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
@@ -40,9 +38,9 @@ class SurveyListRow extends StatelessWidget {
     );
 
     final surveyCard = Container(
-      height: 124.0,
+      //height: 124.0,
       decoration: BoxDecoration(
-        color: Colors.white70,
+        color: Color(0xEEFEFEFE),
         shape: BoxShape.rectangle,
         borderRadius: BorderRadius.circular(8.0),
         boxShadow: <BoxShadow>[
@@ -61,6 +59,7 @@ class SurveyListRow extends StatelessWidget {
           settings: RouteSettings(name: '/surveyStart'),
           builder: (BuildContext context) => SurveyStartPage(survey: survey))),
       child: Container(
+        //color: Colors.black,
         height: 120.0,
         margin: const EdgeInsets.symmetric(
           vertical: 16.0,
