@@ -5,13 +5,13 @@ import 'survey/SurveyListPage.dart';
 import 'TestPage.dart';
 
 class MenuPage extends StatefulWidget {
-  final Survey survey;
+  final List<Survey> surveys;
 
-  MenuPage({this.survey});
+  MenuPage({this.surveys});
 
   @override
   _MenuPageState createState() =>
-      _MenuPageState([SurveyListPage(survey: survey), TestPage(), TestPage()]);
+      _MenuPageState([SurveyListPage(surveys: surveys), TestPage(), TestPage()]);
 }
 
 class _MenuPageState extends State<MenuPage> {

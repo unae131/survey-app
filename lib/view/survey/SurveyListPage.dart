@@ -3,9 +3,9 @@ import 'package:nidocapp/model/Survey.dart';
 import 'package:nidocapp/view/survey/SurveyListRow.dart';
 
 class SurveyListPage extends StatefulWidget {
-  final Survey survey; // 후에 리스트로 받기
+  final List<Survey> surveys; // 후에 리스트로 받기
 
-  SurveyListPage({this.survey});
+  SurveyListPage({this.surveys});
 
   @override
   _SurveyListPage createState() => _SurveyListPage();
@@ -14,15 +14,6 @@ class SurveyListPage extends StatefulWidget {
 class _SurveyListPage extends State<SurveyListPage> {
   @override
   Widget build(BuildContext context) {
-    // 임시
-    var surveys = [
-      widget.survey,
-      //widget.survey,
-      //widget.survey,
-      //widget.survey,
-      //widget.survey,
-    ];
-
     return Expanded(
       child: Container(
         //color: Color(0xFF736AB7),
@@ -34,8 +25,8 @@ class _SurveyListPage extends State<SurveyListPage> {
               sliver: SliverFixedExtentList(
                 itemExtent: 152.0,
                 delegate: SliverChildBuilderDelegate(
-                  (context, index) => SurveyListRow(surveys[index]),
-                  childCount: surveys.length,
+                  (context, index) => SurveyListRow(widget.surveys[index]),
+                  childCount: widget.surveys.length,
                 ),
               ),
             ),

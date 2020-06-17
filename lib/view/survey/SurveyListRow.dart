@@ -13,10 +13,10 @@ class SurveyListRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final headerTextStyle = TextStyle(fontFamily: 'DoHyeon').copyWith(
       color: Color(0xFF333366),
-      fontSize: 22.0,
+      fontSize: 18.0,
     );
     final regularTextStyle = TextStyle(fontFamily: 'NotoSansKR').copyWith(
-        color: Colors.blueGrey, fontSize: 12.0, fontWeight: FontWeight.w500);
+        color: Colors.blueGrey, fontSize: 11.0, fontWeight: FontWeight.w500);
 
     final surveyContent = Container(
       margin: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
@@ -25,15 +25,15 @@ class SurveyListRow extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Hero(
-            tag: "surve-topic-${survey.topic}",
+            tag: "survey-topic-${survey.topic}",
             child: Text(
               survey.topic,
               style: headerTextStyle,
             ),
           ),
-          Container(height: 0.0),
+          //Container(height: 0.0),
           Text(
-            '이거 어떻게 자동으로 넘어가지,,,\n이거 오버플로우나면 어떡하지,,,,,,,,,,,,,,혜원아 사랑해',
+            '이거 어떻게 자동으로 넘어가지,,,\n이거 오버플로우나면 어떡하지,,,,,,,,,,,,,,\n혜원아 사랑해',
             style: regularTextStyle,
           ),
         ],

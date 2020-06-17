@@ -30,7 +30,7 @@ class SurveyStartPage extends StatelessWidget {
                   Container(
                       margin: EdgeInsets.fromLTRB(16, 32, 16, 32),
                       child: Hero(
-                        tag: "surve-topic-${survey.topic}",
+                        tag: "survey-topic-${survey.topic}",
                         child: Text('${survey.topic} 시작합니다', style: textStyle),
                       )),
                   RaisedButton(
