@@ -11,12 +11,18 @@ class SurveyListRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final headerTextStyle = TextStyle(fontFamily: 'DoHyeon').copyWith(
+    final headerTextStyle = TextStyle(
+      fontFamily: 'DoHyeon',
       color: Color(0xFF333366),
       fontSize: 18.0,
     );
-    final regularTextStyle = TextStyle(fontFamily: 'NotoSansKR').copyWith(
-        color: Colors.blueGrey, fontSize: 11.0, fontWeight: FontWeight.w500);
+
+    final regularTextStyle = TextStyle(
+        fontFamily: 'NotoSansKR',
+        color: Colors.blueGrey,
+        fontSize: 11.0,
+        fontWeight: FontWeight.w500,
+    );
 
     final surveyContent = Container(
       margin: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),

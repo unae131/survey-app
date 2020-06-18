@@ -1,10 +1,12 @@
 class Survey {
   String _topic;
   List<Question> _questions;
+  int idx = 0;
 
   Survey(this._topic, this._questions);
 
   String get topic => _topic;
+  List get questions => _questions;
 
   factory Survey.fromJson(dynamic json) {
     List qs = List();
@@ -12,7 +14,7 @@ class Survey {
     if (json['questions'] != null) {
       var qObjsJson = json['questions'] as List;
       qs = qObjsJson
-          .map((q) => q['answerType'] as String == 'subjective'
+          .map((q) => q['type'] as String == 'subjective'
               ? Subjective.fromJson(q)
               : Objective.fromJson(q))
           .toList();
@@ -20,37 +22,42 @@ class Survey {
     return Survey(json['topic'] as String, qs);
   }
 
-  List get questions => _questions;
+  Question get(){
+    return _questions[idx];
+  }
+
+  Question next(int i){
+    if( i < 0 || _questions.length <= i || idx == i)
+      return null;
+    idx = i;
+    return _questions[idx];
+  }
+
 }
 
 abstract class Question {
   int _no;
-  int _linkTo;
   String _qStr;
-  String _answerType;
+  int _link;
 
-  Question(this._no, this._linkTo, this._qStr, this._answerType);
+  Question(this._no, this._qStr, this._link);
 
   int get no => _no;
-
-  int get linkTo => _linkTo;
-
   String get qStr => _qStr;
-
-  String get answerType => _answerType;
+  int get link => _link;
 }
 
 class Subjective extends Question {
-  Subjective(int no, int link, String str, String type)
-      : super(no, link, str, type);
+
+  Subjective(int no, String str, int link)
+      : super(no, str, link);
 
   factory Subjective.fromJson(dynamic json) {
-    int linkTo = (json['no'] as int) + 1;
+    int linkTo = (json['no'] as int) + 1; // default
 
-    if (json['linkTo'] != null) linkTo = json['linkTo'] as int;
+    if (json['link'] != null) linkTo = json['link'] as int;
 
-    return Subjective(json['no'] as int, linkTo, json['question'] as String,
-        json['answerType'] as String);
+    return Subjective(json['no'] as int, json['question'] as String, linkTo);
   }
 }
 
@@ -58,33 +65,29 @@ class Objective extends Question {
   List<Option> _options;
   bool _mul;
 
-  List<Option> get options => _options;
+  Objective(int no, String str, int link, this._options, this._mul)
+      : super(no, str, link);
 
+  List<Option> get options => _options;
   bool get mul => _mul;
 
-  Objective(int no, int link, String str, String type, this._options, this._mul)
-      : super(no, link, str, type);
-
   factory Objective.fromJson(dynamic json) {
-    int linkTo = (json['no'] as int) + 1;
-
-    if (json['linkTo'] != null) linkTo = json['linkTo'] as int;
-
     bool mul = false;
-
-    if (json['mulAnswer'] != null) {
-      mul = json['mulAnswer'] as bool;
-    }
-
     List options = List();
+    int linkTo = (json['no'] as int) + 1; // default
+
+    if (json['link'] != null) linkTo = json['link'] as int;
+
+    if (json['multi'] != null) {
+      mul = json['multi'] as bool;
+    }
 
     if (json['options'] != null) {
       var optObjsJson = json['options'] as List;
-      options = optObjsJson.map((op) => Option.fromJson(op)).toList();
+      options = optObjsJson.map((op) => Option.fromJson(op, json['no'] as int)).toList();
     }
 
-    return Objective(json['no'] as int, linkTo, json['question'] as String,
-        json['answerType'] as String, options, mul);
+    return Objective(json['no'] as int, json['question'] as String, linkTo, options, mul);
   }
 }
 
@@ -93,27 +96,20 @@ class Option {
   bool _text;
   int _linkTo;
 
-  String get answer => _answer;
-
-  bool get text => _text;
-
-  int get linkTo => _linkTo;
-
   Option(this._answer, this._text, this._linkTo);
 
-  factory Option.fromJson(dynamic json) {
+  String get answer => _answer;
+  bool get text => _text;
+  int get linkTo => _linkTo;
+
+  factory Option.fromJson(dynamic json, int qNum) {
     bool text = false;
-    int linkTo = -1;
+    int linkTo = qNum + 1;
 
-    if (json['textAnswer'] != null) text = json['textAnswer'] as bool;
+    if (json['input'] != null) text = json['input'] as bool;
 
-    if (json['linkTo'] != null) linkTo = json['linkTo'] as int;
+    if (json['link'] != null) linkTo = json['link'] as int;
 
     return Option(json['value'] as String, text, linkTo);
-  }
-
-  @override
-  String toString() {
-    return '(textType: $_text, link to + $_linkTo) $_answer';
   }
 }

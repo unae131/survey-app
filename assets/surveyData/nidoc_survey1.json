@@ -1,15 +1,15 @@
 {
-    "topic": "Health Survey1",
+    "topic": "설문조사1",
     "questions": [
         {
             "no": 0,
             "question": "name?",
-            "answerType": "subjective"
+            "type": "subjective"
         },
         {
             "no": 1,
             "question": "age?",
-            "answerType": "objective",
+            "type": "objective",
             "options": [
                 {
                     "value": "10 ~ 19"
@@ -25,14 +25,14 @@
                 },
                 {
                     "value": "under 10 or over 50",
-                    "linkTo": 4
+                    "link": 4
                 }
             ]
         },
         {
             "no": 2,
             "question": "sex?",
-            "answerType": "selectable",
+            "type": "selectable",
             "options": [
                 {
                     "value": "M"
@@ -45,8 +45,8 @@
         {
             "no": 3,
             "question": "hurt point?",
-            "answerType": "objective",
-            "mulAnswer" : true,
+            "type": "objective",
+            "multi" : true,
             "options": [
                 {
                     "value": "eye"
@@ -62,18 +62,18 @@
                 },
                 {
                     "value": "other",
-                    "textAnswer": true
+                    "input": true
                 },
                 {
                     "value": "nowhere",
-                    "linkTo": -1
+                    "link": -1
                 }
             ]
         },
         {
             "no": 4,
             "question": "What would you do when you feel uncomfortable of your body?",
-            "answerType": "objective",
+            "type": "objective",
             "options": [
                 {
                     "value": "search"
@@ -89,7 +89,7 @@
                 },
                 {
                     "value": "guitar",
-                    "textAnswer": true
+                    "input": true
                 }
             ]
         }

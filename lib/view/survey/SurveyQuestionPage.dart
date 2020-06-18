@@ -1,219 +1,234 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nidocapp/model/Survey.dart';
-import '../HomePage.dart';
-import '../NiDocAppBar.dart';
+import 'SurveyAppBar.dart';
 import 'SurveyFinishPage.dart';
 
 /* 이전 질문 페이지로 돌아갈 때 응답 남을 수 있게 수정 필요
 * */
 class QuestionPage extends StatefulWidget {
-  final Survey survey; // 무조건 하나 이상은 있음
-  final int qIdx;
+  final Survey survey; // 무조건 한 문제 이상은 있음
   final List answer;
 
-  QuestionPage(this.survey, this.qIdx, this.answer);
+  QuestionPage(this.survey, this.answer);
 
   @override
   _QuestionPageState createState() =>
-      _QuestionPageState(survey.questions[qIdx]);
+      _QuestionPageState(survey.get(), survey.get().link);
 }
 
 class _QuestionPageState extends State<QuestionPage> {
-  final myController = TextEditingController();
-  Question question;
+  final Question question;
   int linkTo;
-  var _groupValue = 0;
-  List<bool> _isChecked;
+  bool answer = false;
 
-  _QuestionPageState(this.question) {
-    linkTo = question.linkTo;
-  }
+  int _radioValue = -1;
+  List _checkValue;
+
+  _QuestionPageState(this.question, this.linkTo);
+
+  final questionTextStyle = TextStyle(
+    fontFamily: 'DoHyeon',
+    color: Color(0xFF333366),
+    fontSize: 24.0,
+  );
+
+  final optionTextStyle = TextStyle(
+    fontFamily: 'NotoSansKR',
+    color: Color(0xFF333366),
+    fontSize: 18.0,
+  );
 
   @override
   Widget build(BuildContext context) {
+    final questionContent = Container(
+      alignment: Alignment.topLeft,
+      //color: Colors.blue,
+      child: Text(
+        'Q. ${question.qStr}',
+        style: questionTextStyle,
+      ),
+    );
+
+    final wholeBody = Container(
+      padding: EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        children: <Widget>[
+          Container(height: 100),
+          questionContent,
+          Container(height: 36),
+          question is Objective
+              ? objective(question as Objective)
+              : subjective(question as Subjective),
+          Container(height: 48),
+          buttons(),
+          Container(height: 100),
+          //nextPageButton()
+        ],
+      ),
+    );
+
     if (question == null) {
+      return FinishPage(widget.survey, widget.answer);
+    } else {
       return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.survey.topic),
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text('파일 오류 발생'),
-              RaisedButton(
-                child: Text(
-                  '종료',
-                ),
-                onPressed: () => Navigator.push(
-                  // flow 수정하기
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MenuPage(),
-                  ),
+        body: Column(
+          children: <Widget>[
+            SurveyAppBar('${widget.survey.topic}'),
+            Expanded(
+              child: Container(
+                //color: Colors.blueGrey,
+                child: CustomScrollView(
+                  scrollDirection: Axis.vertical,
+                  slivers: <Widget>[
+                    SliverPadding(
+                      padding: const EdgeInsets.symmetric(vertical: 24.0),
+                      sliver: SliverToBoxAdapter(
+                        child: wholeBody,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
-      );
-    } else {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            widget.survey.topic,
-          ),
-        ),
-        body: Center(
-          child: Container(
-            margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
-            /*ListView(
-            scrollDirection: Axis.vertical,
-            padding: EdgeInsets.all(30),
-            children: <Widget>[*/
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                //NiDocAppBar('${widget.survey.topic}'),
-                Text(
-                  '${question.qStr}',
-                  textScaleFactor: 1.5,
-                  style: Theme.of(context).textTheme.bodyText1,
-                  textAlign: TextAlign.center,
-                ),
-                answerBody(),
-                nextPageButton()
-              ],
-            ),
-          ),
-          /*],
-          ),*/
+            )
+          ],
         ),
       );
     }
   }
 
-  Widget answerBody() {
-    if (question is Subjective)
-      return answerSub();
-    else
-      return answerObj();
+  Widget subjective(Subjective question) {
+    return TextField();
   }
 
-  Widget answerSub() {
-    return TextField(
-      controller: myController,
-    );
-    // 제출 기능 추가 구현 필요, 객관식에서도 쓰인 것 주의
+  Widget objective(Objective question) {
+    var options;
+    var i = -1;
+
+    if (_checkValue == null) {
+      _checkValue = List(question.options.length);
+      _checkValue.fillRange(0, question.options.length, false);
+    }
+
+    options = question.options.map((option) {
+      i++;
+      return question.mul ? drawCheckBox(option, i) : drawRadio(option, i);
+    }).toList();
+    return Column(children: options);
   }
 
-  Widget answerObj() {
-    Objective question = this.question as Objective;
-
-    int i = 1;
-    return Container(
-      padding: EdgeInsets.fromLTRB(40, 30, 40, 30),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: question.options
-            .map((o) => Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: drawOption(o, i++, question.mul),
-                ))
-            .toList(),
+  Widget drawRadio(Option option, int i) {
+    List row = <Widget>[
+      Radio(
+        value: i,
+        groupValue: _radioValue,
+        onChanged: (value) {
+          setState(() {
+            answer = true;
+            _radioValue = value;
+            linkTo = option.linkTo;
+          });
+        },
       ),
-    );
-  }
-
-  List<Widget> drawOption(Option o, int i, bool mul) {
-    List children = <Widget>[
-      !mul ? singOptions(o, i) : mulOptions(o, i),
-      Text(o.answer)
+      Text(
+        option.answer,
+        style: optionTextStyle,
+      )
     ];
-    if (o.text) {
-      children.add(SizedBox(
-        width: 200,
-        child: answerSub(),
+
+    if (option.text) {
+      row.add(Container(
+        width: 16,
       ));
+      row.add(Expanded(child: TextField()));
     }
-    return children;
-  }
 
-  Widget singOptions(Option o, int i) {
-    return Radio(
-      value: i,
-      groupValue: _groupValue,
-      onChanged: (newValue) => setState(() {
-        if (o.linkTo != -1)
-          linkTo = o.linkTo;
-        else
-          linkTo = question.linkTo;
-
-        _groupValue = newValue;
-        widget.answer[widget.qIdx] = [i.toString()];
-      }),
+    return Row(
+      children: row,
     );
   }
 
-  Widget mulOptions(Option o, int i) {
-    if (_isChecked == null) {
-      _isChecked = List((this.question as Objective).options.length);
-      _isChecked.fillRange(0, _isChecked.length, false);
-    }
-
-    if (widget.answer[widget.qIdx] == null)
-      widget.answer[widget.qIdx] = List(_isChecked.length);
-
-    // 다중 선택의 경우 선택지 각각에 링크 부여 불가능
-    return Checkbox(
-      value: _isChecked[i - 1],
-      onChanged: (newValue) => setState(() {
-        _isChecked[i - 1] = newValue;
-        if (newValue) {
-          widget.answer[widget.qIdx][i - 1] = 'true';
-        } else {
-          widget.answer[widget.qIdx][i - 1] = 'false';
-        }
-      }),
-    );
-  }
-
-  Widget nextPageButton() {
-    String str;
-    var page;
-
-    if (linkTo >= widget.answer.length || linkTo < 0) {
-      str = '제출';
-      page = FinishPage(widget.survey, widget.answer);
-    } else {
-      str = '다음';
-      page = QuestionPage(widget.survey, linkTo, widget.answer);
-    }
-
-    return RaisedButton(
-      color: Colors.cyan,
-      child: Text(
-        str,
-        style: TextStyle(
-          fontSize: 20,
-          color: Colors.white,
-        ),
+  Widget drawCheckBox(Option option, int i) {
+    List row = <Widget>[
+      Checkbox(
+        value: _checkValue[i],
+        onChanged: (value) {
+          setState(() {
+            answer = true;
+            _checkValue[i] = value;
+          });
+        },
       ),
-      onPressed: () {
-        if (widget.answer[widget.qIdx] == null)
-          widget.answer[widget.qIdx] = List();
+      Text(
+        option.answer,
+        style: optionTextStyle,
+      )
+    ];
 
-        if (_isChecked == null)
-          widget.answer[widget.qIdx].add(myController.text);
-
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => page,
-          ),
-        );
-      },
+    if (option.text) {
+      row.add(Container(
+        width: 16,
+      ));
+      row.add(Expanded(child: TextField()));
+    }
+    return Row(
+      children: row,
     );
+  }
+
+  Widget buttons() {
+    final buttonTextStyle = TextStyle(
+        fontFamily: "DoHyeon",
+        color: Colors.white,
+        fontSize: 16,
+        fontWeight: FontWeight.w100);
+
+    final lastButton = RaisedButton(
+        color: Color(0xFF00CCFF),
+        child: Text(
+          '이전',
+          style: buttonTextStyle,
+        ),
+        onPressed: () {
+          writeAnswer();
+          Navigator.pop(context);
+        });
+
+    final nextButton = RaisedButton(
+        color: Color(0xFF00CCFF),
+        child: Text(
+          '다음',
+          style: buttonTextStyle,
+        ),
+        onPressed: () {
+          //if (answer) {
+          writeAnswer();
+          widget.survey.next(linkTo);
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      QuestionPage(widget.survey, widget.answer)));
+          //}
+        });
+
+    return Container(
+        //color: Colors.black,
+        alignment: Alignment.bottomCenter,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[lastButton, Container(width: 32), nextButton],
+        ));
+  }
+
+  void writeAnswer() {
+    if (question is Subjective) {
+    } else if (question is Objective && (question as Objective).mul) {
+      List mulChecked = List();
+      _checkValue.forEach((e) {
+        if (e == true) answer = true;
+        //기록
+      });
+    } else {}
   }
 }
