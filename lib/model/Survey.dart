@@ -1,7 +1,6 @@
 class Survey {
   String _topic;
   List<Question> _questions;
-  int idx = 0;
 
   Survey(this._topic, this._questions);
 
@@ -21,18 +20,6 @@ class Survey {
     }
     return Survey(json['topic'] as String, qs);
   }
-
-  Question get(){
-    return _questions[idx];
-  }
-
-  Question next(int i){
-    if( i < 0 || _questions.length <= i || idx == i)
-      return null;
-    idx = i;
-    return _questions[idx];
-  }
-
 }
 
 abstract class Question {

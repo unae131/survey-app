@@ -38,10 +38,9 @@ class SurveyStartPage extends StatelessWidget {
                     textColor: Colors.white,
                     child: Text('시작'),
                     onPressed: () {
-                      survey.idx = 0;
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (BuildContext context) => QuestionPage(
-                            survey, List<List>(survey.questions.length)),
+                            survey, List<List>(survey.questions.length), 0),
                       ));
                     },
                   ),
